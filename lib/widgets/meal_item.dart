@@ -31,13 +31,17 @@ class MealItem extends StatelessWidget {
         child: Stack(
           children: [
             // image
-            FadeInImage(
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(meal.imageUrl),
-                fit: BoxFit.cover,
-                height: 200,
-                width: double.infinity,
-                ),
+            // Hero is for Animation
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(meal.imageUrl),
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: double.infinity,
+                  ),
+            ),
             // for title and gradient    
             Positioned(
               bottom: 0,

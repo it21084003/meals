@@ -14,15 +14,25 @@ class MealDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
+    final isFavorite = favoriteMeals.contains(meal);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         // favaorite icon
         actions: [
           IconButton(
-            icon: const Icon(Icons.star),
+            icon:  AnimatedSwitcher(
+              duration: const Duration(milliseconds: 100),
+              transitionBuilder: (child, animation) => RotationTransition(
+                turns: Tween<double>(begin: 0.8, end: 1).animate(animation),
+                child: child,
+              ),
+              child: Icon(isFavorite ? Icons.star : Icons.star_border, key: ValueKey(isFavorite),)
+            ),
             onPressed: () {
-              //onToggleFavorite(meal);
+              //onToggleFavorite(meal); 
               final wasAdded = ref
                   .read(favoriteMealsProvider.notifier)
                   .toggleMealFavoriteStatus(meal);
@@ -41,8 +51,12 @@ class MealDetailsScreen extends ConsumerWidget {
         child: Column(
           children: [
             // Image part
-            Image.network(meal.imageUrl,
-                height: 300, width: double.infinity, fit: BoxFit.cover),
+            // Hero is for Animation
+            Hero(
+              tag: meal.id,
+              child: Image.network(meal.imageUrl,
+                  height: 300, width: double.infinity, fit: BoxFit.cover),
+            ),
             const SizedBox(height: 10),
             // Ingredients part
             Text('Ingredients',
